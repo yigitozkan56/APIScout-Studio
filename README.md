@@ -1,68 +1,106 @@
-🔍 APIScout
-APIScout is a lightweight, multithreaded desktop application that validates API keys and lists all available models across multiple AI providers (OpenAI, Google Gemini, OpenRouter, Groq, etc.) with multi-language support.
+# 🔍 APIScout
 
-📸 Screenshots
+<p align="center">
+  <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" />
+  <img src="https://img.shields.io/badge/Standalone-.EXE-green?style=for-the-badge" alt="Executable" />
+  <img src="https://img.shields.io/badge/MultiThreaded-Async-brightgreen?style=for-the-badge" alt="Async" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License" />
+</p>
 
-<img width="733" height="662" alt="image" src="https://github.com/user-attachments/assets/95df080b-dd9b-4f29-a395-cd15ffc2cdf0" />
+<p align="center">
+  <b>APIScout</b> is a standalone, lightweight, and multi-language desktop application for AI developers and researchers. It instantly validates API keys and scans available model endpoints across major AI providers without requiring Python or any external dependencies.
+</p>
 
-<img width="730" height="649" alt="image" src="https://github.com/user-attachments/assets/2358fc6c-9b0e-496d-a9e8-776aafe672e1" />
+---
 
+## 🎬 Live Demo
 
-✨ Features
-🌐 Multi-Language Support: Instant switching between English, Turkish, Spanish, and French.
+<img width="733" height="662" alt="Ekran görüntüsü 2026-09-27 121218" src="https://github.com/user-attachments/assets/0ef48ab2-b69b-4b94-a2b7-ea5c88c07f5d" />
 
-⚡ Asynchronous Scanning: Non-blocking multithreaded background processing keeps the UI responsive.
+<img width="730" height="649" alt="Ekran görüntüsü 2026-09-27 121411" src="https://github.com/user-attachments/assets/bcf19e36-6166-400e-ad3b-03e3f91ff7a3" />
 
-🔒 Privacy First: API keys are never stored or logged; input fields automatically clear when switching providers or closing the app.
+---
 
-🔌 Supported Providers:
+## 💡 Why APIScout?
 
-OpenAI
+Managing multiple AI service providers often requires testing API key validity, scope permissions, and checking accessible model versions. **APIScout** combines this process into a single executable application, eliminating the need for terminal commands, Python environments, or manual API calls.
 
-Google Gemini
+---
 
-OpenRouter
+## ✨ Key Features
 
-Groq
+| Feature | Description |
+| :--- | :--- |
+| 🌐 **Multi-Language UI** | Switch dynamically between **English**, **Turkish**, **Spanish**, and **French** without restarting. |
+| 🚀 **Zero Dependencies** | Pre-compiled standalone executable (.exe). No Python installation required. |
+| ⚡ **Asynchronous Threading** | Non-blocking background workers keep the interface smooth and responsive during API calls. |
+| 🛡️ **Privacy & Security First** | API keys are held strictly in local memory, never logged or saved, and auto-cleared upon provider switch or exit. |
 
-🚀 Installation & Running
-Prerequisites
-Python 3.8 or higher
+---
 
-requests library
+## 🔌 Supported Providers & Endpoints
 
-Steps
-Clone the repository:
-git clone https://github.com/YOUR_USERNAME/APIScout.git
-cd APIScout
+| Provider | Status | Base Endpoint |
+| :--- | :---: | :--- |
+| **OpenAI** | ✅ Active | api.openai.com/v1/models |
+| **Google Gemini** | ✅ Active | generativelanguage.googleapis.com |
+| **OpenRouter** | ✅ Active | openrouter.ai/api/v1/models |
+| **Groq** | ✅ Active | api.groq.com/openai/v1/models |
 
-Install dependencies:
-pip install requests
+---
 
-Run the application:
-python main.py
+## 🏗️ Architecture & Workflow
 
-🛠️ Usage
-Select your preferred Language and AI Provider from the dropdown menus.
+```text
+  +-------------------+
+  |   User Dashboard  |  (Desktop GUI)
+  +---------+---------+
+            |
+            v
+  +-------------------+
+  |  Async Dispatcher |  (Background Worker)
+  +---------+---------+
+            |
+            v
+  +-------------------+      GET Request
+  |   REST Provider   | ------------------->  OpenAI / Gemini /
+  |      Engines      | <-------------------  OpenRouter / Groq
+  +-------------------+     JSON Response
+```
 
-Enter your API Key into the input field.
+---
 
-Click the Scan Models button.
+## 🚀 Quick Start Guide
 
-View the full list of supported models accessible by your API key in the results area.
+### Download & Run (.exe)
 
-🤝 Contributing
-Contributions are welcome! If you would like to improve APIScout, please follow these steps:
+1. Go to the Releases section on GitHub.
+2. Download the latest version of `APIScout.exe`.
+3. Double-click `APIScout.exe` to launch the application immediately.
 
-Fork the Repository
+---
 
-Create your Feature Branch: git checkout -b feature/AmazingFeature
+## 📖 Usage Instructions
 
-Commit your Changes: git commit -m 'Add some AmazingFeature'
+1. Select your preferred **Language** and **AI Provider** from the header dropdowns.
+2. Input your **API Key** into the entry field.
+3. Click **Scan Models** to initialize the scan.
+4. Browse the numbered list of active models available for your account.
 
-Push to the Branch: git push origin feature/AmazingFeature
+---
 
-Open a Pull Request
+## 🤝 Contributing
 
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
+Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch
+3. Commit your Changes
+4. Push to the Branch
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
