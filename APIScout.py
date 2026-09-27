@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 import requests
 import os
+import threading
 
 # ==================== DİL ÇEVİRİ SÖZLÜĞÜ ====================
 TRANSLATIONS = {
@@ -214,7 +215,7 @@ class AIModelScannerApp:
         provider_dropdown = ttk.Combobox(
             self.form_frame, 
             textvariable=self.provider_var, 
-            values=list(self.providers.keys()), 
+            values=list(list(self.providers.keys())), 
             state="readonly",
             width=25
         )
@@ -268,11 +269,18 @@ class AIModelScannerApp:
 
         self.status_label.config(text=f"{provider} {t['connecting']}", foreground="blue")
         self.result_area.delete("1.0", tk.END)
-        self.root.update_idletasks()
+        self.scan_btn.config(state="disabled")
 
+        # Arka planda tarama işlemini başlat
+        threading.Thread(target=self._async_scan, args=(provider, api_key), daemon=True).start()
+
+    def _async_scan(self, provider, api_key):
         scan_func = self.providers[provider]
         success, result = scan_func(api_key, self.current_lang)
+        self.root.after(0, lambda: self._update_scan_results(success, result))
 
+    def _update_scan_results(self, success, result):
+        t = TRANSLATIONS[self.current_lang]
         if success:
             msg = t["success"].format(count=len(result))
             self.status_label.config(text=msg, foreground="green")
@@ -281,6 +289,8 @@ class AIModelScannerApp:
         else:
             self.status_label.config(text=t["error"], foreground="red")
             self.result_area.insert(tk.END, f"{t['err_prefix']}{result}")
+        
+        self.scan_btn.config(state="normal")
 
 if __name__ == "__main__":
     root = tk.Tk()
