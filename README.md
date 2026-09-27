@@ -15,9 +15,9 @@
 
 ## 🎬 Live Demo
 
-<img width="400" height="300" alt="Ekran görüntüsü 2026-09-27 121218" src="https://github.com/user-attachments/assets/0ef48ab2-b69b-4b94-a2b7-ea5c88c07f5d" />
+<img width="500" height="430" alt="Ekran görüntüsü 2026-09-27 121218" src="https://github.com/user-attachments/assets/0ef48ab2-b69b-4b94-a2b7-ea5c88c07f5d" />
 
-<img width="400" height="300" alt="Ekran görüntüsü 2026-09-27 121411" src="https://github.com/user-attachments/assets/bcf19e36-6166-400e-ad3b-03e3f91ff7a3" />
+<img width="500" height="430" alt="Ekran görüntüsü 2026-09-27 121411" src="https://github.com/user-attachments/assets/bcf19e36-6166-400e-ad3b-03e3f91ff7a3" />
 
 ---
 
