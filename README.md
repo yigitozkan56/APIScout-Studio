@@ -4,7 +4,6 @@ APIScout is a lightweight, multithreaded desktop application that validates API 
 📸 Screenshots
 <img width="733" height="662" alt="image" src="https://github.com/user-attachments/assets/95df080b-dd9b-4f29-a395-cd15ffc2cdf0" />
 
-
 <img width="730" height="649" alt="image" src="https://github.com/user-attachments/assets/2358fc6c-9b0e-496d-a9e8-776aafe672e1" />
 
 
