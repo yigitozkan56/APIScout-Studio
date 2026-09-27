@@ -19,7 +19,7 @@
 
 <img width="500" height="430" alt="Ekran görüntüsü 2026-09-27 121411" src="https://github.com/user-attachments/assets/bcf19e36-6166-400e-ad3b-03e3f91ff7a3" />
 
-<img width="1000" height="860" alt="Ekran Kaydı 2026-09-27 123305" src="https://github.com/user-attachments/assets/183278f9-2f98-480d-a942-e9b92fd74253" />
+<img width="500" height="430" alt="Ekran Kaydı 2026-09-27 123305" src="https://github.com/user-attachments/assets/183278f9-2f98-480d-a942-e9b92fd74253" />
 
 ---
 
