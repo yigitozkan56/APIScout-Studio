@@ -183,6 +183,9 @@ class AIModelScannerApp:
         self.create_widgets()
         self.update_ui_language()
 
+        # Uygulama kapatıldığında bellek temizliği yap
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
     def create_widgets(self):
         # Dil Seçim Çubuğu
         lang_frame = ttk.Frame(self.root, padding=(15, 10, 15, 0))
@@ -212,14 +215,15 @@ class AIModelScannerApp:
         self.lbl_provider.grid(row=0, column=0, sticky="w", pady=5)
         
         self.provider_var = tk.StringVar(value="OpenAI")
-        provider_dropdown = ttk.Combobox(
+        self.provider_dropdown = ttk.Combobox(
             self.form_frame, 
             textvariable=self.provider_var, 
-            values=list(list(self.providers.keys())), 
+            values=list(self.providers.keys()), 
             state="readonly",
             width=25
         )
-        provider_dropdown.grid(row=0, column=1, sticky="w", padx=10, pady=5)
+        self.provider_dropdown.grid(row=0, column=1, sticky="w", padx=10, pady=5)
+        self.provider_dropdown.bind("<<ComboboxSelected>>", self.on_provider_change)
 
         self.lbl_api_key = ttk.Label(self.form_frame)
         self.lbl_api_key.grid(row=1, column=0, sticky="w", pady=5)
@@ -247,6 +251,13 @@ class AIModelScannerApp:
         self.current_lang = lang_map.get(self.lang_var.get(), "en")
         self.update_ui_language()
 
+    def on_provider_change(self, event=None):
+        """Sağlayıcı değiştiğinde API alanını ve sonuç alanını temizler (Güvenlik)."""
+        self.api_key_entry.delete(0, tk.END)
+        self.result_area.delete("1.0", tk.END)
+        t = TRANSLATIONS[self.current_lang]
+        self.status_label.config(text=t["initial_status"], foreground="black")
+
     def update_ui_language(self):
         t = TRANSLATIONS[self.current_lang]
         self.root.title(t["title"])
@@ -261,6 +272,7 @@ class AIModelScannerApp:
     def start_scan(self):
         t = TRANSLATIONS[self.current_lang]
         provider = self.provider_var.get()
+        # Input Sanitization: Boşlukları ve gereksiz karakterleri temizle
         api_key = self.api_key_entry.get().strip()
 
         if not api_key:
@@ -271,7 +283,6 @@ class AIModelScannerApp:
         self.result_area.delete("1.0", tk.END)
         self.scan_btn.config(state="disabled")
 
-        # Arka planda tarama işlemini başlat
         threading.Thread(target=self._async_scan, args=(provider, api_key), daemon=True).start()
 
     def _async_scan(self, provider, api_key):
@@ -291,6 +302,11 @@ class AIModelScannerApp:
             self.result_area.insert(tk.END, f"{t['err_prefix']}{result}")
         
         self.scan_btn.config(state="normal")
+
+    def on_closing(self):
+        """Uygulama kapatılırken bellekteki verileri temizler."""
+        self.api_key_entry.delete(0, tk.END)
+        self.root.destroy()
 
 if __name__ == "__main__":
     root = tk.Tk()
