@@ -1335,4 +1335,78 @@ class AIModelScannerApp:
 if __name__ == "__main__":
     root = tk.Tk()
     app = AIModelScannerApp(root)
+    if "--self-test" in sys.argv:
+        import http.server
+        import socketserver
+
+        class _MockHandler(http.server.BaseHTTPRequestHandler):
+            def log_message(self, format, *args):
+                pass
+            def do_GET(self):
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"data": [{"id": "gpt-4o-test"}, {"id": "claude-3-7-sonnet-test"}]}).encode("utf-8"))
+            def do_POST(self):
+                length = int(self.headers.get("Content-Length", 0))
+                if length:
+                    self.rfile.read(length)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"choices": [{"message": {"content": "Hello from APIScout Studio Tkinter E2E test!"}}]}).encode("utf-8"))
+
+        httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), _MockHandler)
+        port = httpd.server_address[1]
+        threading.Thread(target=httpd.serve_forever, daemon=True).start()
+
+        def _step1():
+            try:
+                app.toggle_theme()
+                app.toggle_theme()
+                for lang_label in ["Türkçe", "Español", "Français", "English"]:
+                    app.lang_var.set(lang_label)
+                    app.on_language_change()
+                app.provider_var.set("Custom (OpenAI-Compatible)")
+                app.on_provider_change()
+                app.base_url_var.set(f"http://127.0.0.1:{port}/v1")
+                app.api_key_entry.delete(0, tk.END)
+                app.api_key_entry.insert(0, "sk-test-key-12345")
+                app.start_scan()
+                root.after(700, _step2)
+            except Exception as exc:
+                _fail(exc)
+
+        def _step2():
+            try:
+                assert "gpt-4o-test" in app.scanned_models, f"Expected model not found: {app.scanned_models}"
+                app.search_var.set("gpt-4o")
+                app.open_playground()
+                tab_id = app.notebook.select()
+                current_tab = root.nametowidget(tab_id)
+                assert isinstance(current_tab, PlaygroundTab), "Playground tab did not open"
+                current_tab.entry_msg.insert("1.0", "Ping test")
+                current_tab.send()
+                root.after(700, lambda: _step3(current_tab))
+            except Exception as exc:
+                _fail(exc)
+
+        def _step3(current_tab):
+            try:
+                assert "Hello from APIScout Studio Tkinter E2E test!" in current_tab.last_reply, f"Unexpected reply: {current_tab.last_reply}"
+                if len(sys.argv) > 2 and sys.argv[1] == "--self-test":
+                    with open(sys.argv[2], "w", encoding="utf-8") as f:
+                        f.write("SELF_TEST_E2E_OK")
+                httpd.shutdown()
+                root.destroy()
+            except Exception as exc:
+                _fail(exc)
+
+        def _fail(exc):
+            if len(sys.argv) > 2 and sys.argv[1] == "--self-test":
+                with open(sys.argv[2], "w", encoding="utf-8") as f:
+                    f.write(f"SELF_TEST_ERR: {exc}")
+            sys.exit(1)
+
+        root.after(250, _step1)
     root.mainloop()
